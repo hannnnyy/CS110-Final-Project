@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeighborGood - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .empty-state { text-align: center; padding: 40px 20px; color: #6c757d; }
+        .empty-state-icon { font-size: 50px; margin-bottom: 15px; color: #bdb8ad; }
+        .empty-state p { font-size: 18px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+            <h1>NeighborGood</h1>
+        </a>
+        
+        <div class="auth-buttons">
+            <a href="profile.html">
+                <button class="btn-outline">Sign In</button>
+            </a>
+            <button class="btn-solid">Create Account</button>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" class="search-bar" placeholder="Search by category, keyword, or zipcode...">
+        <button class="search-btn">Search</button>
+    </div>
+
+    <div class="main-grid">
+        <div class="feed-section">
+            <h2>Available in your Neighborhood</h2>
+            
+            <div class="empty-state">
+                <div class="empty-state-icon">&#128230;</div>
+                <p>There are no items listed in your neighborhood yet.</p>
+                <a href="create-listing.html">
+                    <button class="btn-solid">Be the first to list an item!</button>
+                </a>
+            </div>
+            
+        </div>
+
+        <div class="sidebar">
+            <h2>Categories</h2>
+            <ul class="category-list">
+                <li>&#128295; Tools</li>
+                <li>&#127859; Kitchen Appliances</li>
+                <li>&#127957; Outdoor Gear</li>
+                <li>&#128187; Electronics</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
