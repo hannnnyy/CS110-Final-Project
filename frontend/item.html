@@ -9,29 +9,59 @@
 <body>
 
 <div class="item-detail-container">
-    <a href="index.html" class="header-link">← Back to Search</a>
+    <a href="index.html" class="header-link">&larr; Back to Search</a>
     
     <div class="top-section">
         <div class="image-gallery">
-            <div class="main-image">🔨</div>
-            <h2>DeWalt 20V Max Cordless Drill</h2>
-            <p><strong>Category:</strong> Tools | <strong>Condition:</strong> Like New</p>
-            <p><strong>Description:</strong> Great power drill, comes with a battery and charger. Barely used it for one shelf project. Please return fully charged!</p>
-            <p>Lender: <a href="profile.html" style="color: #0056b3; font-weight: bold;">Juan V.</a></p>
+            <div class="main-image" id="itemImage">&#128230;</div>
+
+            <!-- added backend-ready placeholders that will be filled with real item data later -->
+            <h2 id="itemTitle">Item details will load here</h2>
+            <p>
+                <strong>Category:</strong> <span id="itemCategory">Not loaded yet</span> |
+                <strong>Condition:</strong> <span id="itemCondition">Not loaded yet</span>
+            </p>
+            <p><strong>Description:</strong> <span id="itemDescription">Not loaded yet</span></p>
+            <p><strong>Borrowing Conditions:</strong> <span id="borrowingConditions">Not loaded yet</span></p>
+            <p><strong>Available:</strong> <span id="itemAvailability">Not loaded yet</span></p>
+            <p><strong>Location:</strong> <span id="itemLocation">Not loaded yet</span></p>
+            <p>Lender: <a href="profile.html" id="itemLender" style="color: #0056b3; font-weight: bold;">Not loaded yet</a></p>
         </div>
         
         <div class="action-panel">
             <h3 style="margin-top: 0;">Request Item</h3>
-            <div class="input-group">
-                <label>Pickup Date:</label>
-                <input type="date">
-            </div>
-            <div class="input-group">
-                <label>Return Date:</label>
-                <input type="date">
-            </div>
-            <button class="btn-request">Submit Request</button>
+
+            <!-- added request form so borrow requests can connect to the backend later -->
+            <form id="requestForm">
+                <div class="input-group">
+                    <label for="pickupDate">Pickup Date:</label>
+                    <input type="date" id="pickupDate" name="pickupDate" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="returnDate">Return Date:</label>
+                    <input type="date" id="returnDate" name="returnDate" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="requestMessage">Message to Lender:</label>
+                    <textarea 
+                        id="requestMessage" 
+                        name="requestMessage" 
+                        class="form-control" 
+                        placeholder="Write a short message about why you need this item."
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="btn-request">Submit Request</button>
+            </form>
         </div>
+    </div>
+
+    <!-- added reviews section for item ratings and feedback -->
+    <h3 class="section-title">Reviews</h3>
+    <div style="background: white; border: 1px dashed #ccc; border-radius: 8px; padding: 20px; color: #888;">
+        <p>No reviews yet. Reviews will appear here after completed borrow requests.</p>
     </div>
 </div>
 

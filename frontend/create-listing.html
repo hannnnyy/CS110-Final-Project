@@ -14,43 +14,124 @@
     <h1>List a New Item</h1>
     <p style="color: #650; margin-bottom: 30px;">Help your neighbors by lending out items you aren't using.</p>
 
-    <div class="form-group">
-        <label>Item Title</label>
-        <input type="text" class="form-control" placeholder="e.g., Carpet Cleaner, Power Drill, Tent">
-    </div>
+    <!-- added form structure so this page can connect to the backend later -->
+    <form id="listingForm">
 
-    <div class="form-group">
-        <label>Category</label>
-        <select class="form-control">
-            <option>Tools & Hardware</option>
-            <option>Kitchen Appliances</option>
-            <option>Outdoor & Garden</option>
-            <option>Electronics</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="title">Item Title</label>
+            <input 
+                type="text" 
+                id="title" 
+                name="title" 
+                class="form-control" 
+                placeholder="e.g., Carpet Cleaner, Power Drill, Tent"
+                required
+            >
+        </div>
 
-    <div class="form-group">
-        <label>Condition</label>
-        <select class="form-control">
-            <option>Brand New</option>
-            <option>Like New</option>
-            <option>Good (Normal Wear)</option>
-            <option>Fair (Works fine, looks used)</option>
-        </select>
-    </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" class="form-control" required>
+                <option value="">Select a category</option>
+                <option value="Tools & Hardware">Tools & Hardware</option>
+                <option value="Kitchen Appliances">Kitchen Appliances</option>
+                <option value="Outdoor & Garden">Outdoor & Garden</option>
+                <option value="Electronics">Electronics</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label>Description & Borrowing Conditions</label>
-        <textarea class="form-control" placeholder="Describe the item and set any rules (e.g., 'Please return it clean', 'Comes with extra batteries')."></textarea>
-    </div>
+        <div class="form-group">
+            <label for="condition">Condition</label>
+            <select id="condition" name="condition" class="form-control" required>
+                <option value="">Select condition</option>
+                <option value="Brand New">Brand New</option>
+                <option value="Like New">Like New</option>
+                <option value="Good">Good (Normal Wear)</option>
+                <option value="Fair">Fair (Works fine, looks used)</option>
+            </select>
+        </div>
 
-    <div class="photo-upload">
-        <div style="font-size: 30px; margin-bottom: 10px;">&#128247;</div>
-        Click to upload photos of your item
-    </div>
+        <div class="form-group">
+            <label for="description">Item Description</label>
+            <textarea 
+                id="description" 
+                name="description" 
+                class="form-control" 
+                placeholder="Describe the item, what comes with it, and how it should be used."
+                required
+            ></textarea>
+        </div>
 
-    <button class="btn-submit">Publish Listing</button>
+        <div class="form-group">
+            <label for="borrowingConditions">Borrowing Conditions</label>
+            <textarea 
+                id="borrowingConditions" 
+                name="borrowingConditions" 
+                class="form-control" 
+                placeholder="Example: Please return it clean, return fully charged, or handle with care."
+            ></textarea>
+        </div>
 
+        <div class="form-group">
+            <label for="availabilityStart">Available From</label>
+            <input 
+                type="date" 
+                id="availabilityStart" 
+                name="availabilityStart" 
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="availabilityEnd">Available Until</label>
+            <input 
+                type="date" 
+                id="availabilityEnd" 
+                name="availabilityEnd" 
+                class="form-control"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="neighborhood">Neighborhood</label>
+            <input 
+                type="text" 
+                id="neighborhood" 
+                name="neighborhood" 
+                class="form-control" 
+                placeholder="e.g., Riverside Neighborhood"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="zipcode">Zipcode</label>
+            <input 
+                type="text" 
+                id="zipcode" 
+                name="zipcode" 
+                class="form-control" 
+                placeholder="e.g., 92507"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="itemPhoto">Item Photo</label>
+            <input 
+                type="file" 
+                id="itemPhoto" 
+                name="itemPhoto" 
+                class="form-control"
+                accept="image/*"
+            >
+        </div>
+
+        <button type="submit" class="btn-submit">Publish Listing</button>
+
+    </form>
 </div>
 
 </body>

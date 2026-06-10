@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NeighborGood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <span class="badge">Admin Only</span>
+    </div>
+
+    <a href="index.html" class="header-link">&larr; Back to Home</a>
+
+    <!-- added admin dashboard sections for managing users and item listings -->
+    <div class="data-section">
+        <h2>User Management</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Zipcode</th>
+                    <th>Trust Score</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Juan V.</td>
+                    <td>juan@example.com</td>
+                    <td>92507</td>
+                    <td>N/A</td>
+                    <td>
+                        <button class="btn-warning">Update</button>
+                        <button class="btn-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="data-section">
+        <h2>Listing Management</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Owner</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DeWalt 20V Max Cordless Drill</td>
+                    <td>Juan V.</td>
+                    <td>Tools</td>
+                    <td>Active</td>
+                    <td>
+                        <button class="btn-warning">Review</button>
+                        <button class="btn-danger">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

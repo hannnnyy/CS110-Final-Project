@@ -19,11 +19,14 @@
             <h1>NeighborGood</h1>
         </a>
         
+        <!-- aded auth navigation: sends users to sign in or create account pages -->
         <div class="auth-buttons">
-            <a href="profile.html">
+            <a href="auth.html">
                 <button class="btn-outline">Sign In</button>
             </a>
-            <button class="btn-solid">Create Account</button>
+            <a href="register.html">
+                <button class="btn-solid">Create Account</button>
+            </a>
         </div>
     </header>
 
@@ -36,14 +39,25 @@
         <div class="feed-section">
             <h2>Available in your Neighborhood</h2>
             
-            <div class="empty-state">
-                <div class="empty-state-icon">&#128230;</div>
-                <p>There are no items listed in your neighborhood yet.</p>
-                <a href="create-listing.html">
-                    <button class="btn-solid">Be the first to list an item!</button>
-                </a>
-            </div>
-            
+            <!-- added sample item card so users can click into the item detail page -->
+            <a href="item.html">
+                <div class="item-card">
+                    <div class="item-image">🔨</div>
+
+                    <div class="item-details">
+                        <h3>DeWalt 20V Max Cordless Drill</h3>
+                        <p>Great power drill with battery and charger. Available for short-term borrowing.</p>
+
+                        <div class="tags">
+                            <span class="tag">Tools</span>
+                            <span class="tag">Like New</span>
+                            <span class="tag">92507</span>
+                        </div>
+
+                        <p><strong>Lender:</strong> Juan V.</p>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <div class="sidebar">
