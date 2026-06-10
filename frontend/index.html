@@ -19,42 +19,31 @@
             <h1>NeighborGood</h1>
         </a>
         
-        <!-- aded auth navigation: sends users to sign in or create account pages -->
-        <div class="auth-buttons">
-            <a href="auth.html">
-                <button class="btn-outline">Sign In</button>
-            </a>
-            <a href="register.html">
-                <button class="btn-solid">Create Account</button>
-            </a>
+        <div id="authNav" class="auth-buttons">
+            <a href="auth.html"><button class="btn-outline">Sign In</button></a>
+            <a href="register.html"><button class="btn-solid">Create Account</button></a>
         </div>
     </header>
-
     <div class="search-container">
-        <input type="text" class="search-bar" placeholder="Search by category, keyword, or zipcode...">
-        <button class="search-btn">Search</button>
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search by category, keyword, or zipcode...">
+        <button id="searchBtn" class="search-btn">Search</button>
     </div>
-
     <div class="main-grid">
-        <div class="feed-section">
+        <div id="feedSection" class="feed-section">
             <h2>Available in your Neighborhood</h2>
             
-            <!-- added sample item card so users can click into the item detail page -->
             <a href="item.html">
                 <div class="item-card">
-                    <div class="item-image">🔨</div>
-
+                    <div class="item-image">&#128230;</div>
                     <div class="item-details">
-                        <h3>DeWalt 20V Max Cordless Drill</h3>
+                        <h3>Cordless Power Drill</h3>
                         <p>Great power drill with battery and charger. Available for short-term borrowing.</p>
-
                         <div class="tags">
                             <span class="tag">Tools</span>
                             <span class="tag">Like New</span>
-                            <span class="tag">92507</span>
+                            <span class="tag">12345</span>
                         </div>
-
-                        <p><strong>Lender:</strong> Juan V.</p>
+                        <p><strong>Lender:</strong> John Doe</p>
                     </div>
                 </div>
             </a>
@@ -71,6 +60,66 @@
         </div>
     </div>
 </div>
+
+<script>
+    const API_BASE = "http://localhost:5001/api";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authNav = document.getElementById("authNav");
+        
+        if (token) {
+            authNav.innerHTML = `
+                <a href="profile.html"><button class="btn-outline">Profile</button></a>
+                <button class="btn-solid" onclick="logout()">Logout</button>
+            `;
+        }
+        fetchItems();
+    });
+
+    function logout() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.reload(); 
+    }
+
+    async function fetchItems(searchQuery = "") {
+        try {
+            const url = searchQuery ? `${API_BASE}/items?search=${encodeURIComponent(searchQuery)}` : `${API_BASE}/items`;
+            const response = await fetch(url);
+            const items = await response.json();
+            const feedSection = document.getElementById("feedSection");
+            
+            if (!items || items.length === 0) return; // Keep static if empty
+            
+            feedSection.innerHTML = `<h2>Available in your Neighborhood</h2>`;
+            items.forEach(item => {
+                const ownerName = item.owner ? item.owner.displayName : "Neighbor";
+                feedSection.innerHTML += `
+                    <a href="item.html?id=${item._id}" style="text-decoration: none; color: inherit;">
+                        <div class="item-card">
+                            <div class="item-image">&#128230;</div>
+                            <div class="item-details">
+                                <h3>${item.title}</h3>
+                                <p>${item.description ? item.description.substring(0, 60) + '...' : ''}</p>
+                                <div class="tags">
+                                    <span class="tag">${item.category}</span>
+                                    <span class="tag">${item.condition}</span>
+                                    <span class="tag">${item.zipcode}</span>
+                                </div>
+                                <p><strong>Lender:</strong> ${ownerName}</p>
+                            </div>
+                        </div>
+                    </a>`;
+            });
+        } catch (error) {
+            console.error("Failed to fetch items. Backend might be offline.");
+        }
+    }
+    document.getElementById("searchBtn").addEventListener("click", () => {
+        fetchItems(document.getElementById("searchBar").value);
+    });
+</script>
 
 </body>
 </html>

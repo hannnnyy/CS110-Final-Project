@@ -65,5 +65,85 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const params = new URLSearchParams(window.location.search);
+        const itemId = params.get("id");
+
+        if (!itemId) {
+            document.getElementById("itemTitle").textContent = "Item not found.";
+            return;
+        }
+
+        //Fetch Item Details
+        try {
+            const response = await fetch(`http://localhost:5001/api/items/${itemId}`);
+            const item = await response.json();
+
+            document.getElementById("itemTitle").textContent = item.title;
+            document.getElementById("itemCategory").textContent = item.category;
+            document.getElementById("itemCondition").textContent = item.condition;
+            document.getElementById("itemDescription").textContent = item.description;
+            document.getElementById("borrowingConditions").textContent = item.borrowingConditions || "None";
+            
+            const start = new Date(item.availabilityStart).toLocaleDateString();
+            const end = new Date(item.availabilityEnd).toLocaleDateString();
+            document.getElementById("itemAvailability").textContent = `${start} to ${end}`;
+            
+            document.getElementById("itemLocation").textContent = `${item.neighborhood}, ${item.zipcode}`;
+            
+            if(item.owner) {
+                document.getElementById("itemLender").textContent = item.owner.displayName || "Unknown User";
+            }
+        } catch (error) {
+            console.error("Error loading item:", error);
+            document.getElementById("itemTitle").textContent = "Error loading item data.";
+        }
+
+        //Handle Borrow Request 
+        document.getElementById("requestForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                alert("Please log in to request an item.");
+                window.location.href = "auth.html";
+                return;
+            }
+            const user = JSON.parse(userStr);
+            const payload = {
+                item: itemId,
+                borrowerName: user.displayName,
+                borrowerEmail: user.email,
+                pickupDate: document.getElementById("pickupDate").value,
+                returnDate: document.getElementById("returnDate").value,
+                message: document.getElementById("requestMessage").value
+            };
+
+            try {
+                const reqResponse = await fetch("http://localhost:5001/api/borrow-requests", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (reqResponse.ok) {
+                    alert("Borrow request sent to the owner!");
+                    document.getElementById("pickupDate").value = "";
+                    document.getElementById("returnDate").value = "";
+                    document.getElementById("requestMessage").value = "";
+                } 
+                else {
+                    const errorData = await reqResponse.json();
+                    alert("Failed to send request: " + (errorData.message || "Unknown error"));
+                }
+            } catch (err) {
+                console.error("Request error:", err);
+                alert("Could not connect to the server.");
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

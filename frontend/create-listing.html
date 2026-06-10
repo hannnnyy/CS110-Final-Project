@@ -134,5 +134,55 @@
     </form>
 </div>
 
+<script>
+    document.getElementById("listingForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem("token");
+        
+
+        if (!token) {
+            alert("You must be logged in to create a listing.");
+            window.location.href = "auth.html";
+            return;
+        }
+
+        
+        const payload = {
+            title: document.getElementById("title").value,
+            category: document.getElementById("category").value,
+            condition: document.getElementById("condition").value,
+            description: document.getElementById("description").value,
+            borrowingConditions: document.getElementById("borrowingConditions").value,
+            availabilityStart: document.getElementById("availabilityStart").value,
+            availabilityEnd: document.getElementById("availabilityEnd").value,
+            neighborhood: document.getElementById("neighborhood").value,
+            zipcode: document.getElementById("zipcode").value,
+            status: "available"
+        };
+
+        try {
+            const response = await fetch("http://localhost:5001/api/items", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert("Listing created successfully!");
+                window.location.href = "index.html";
+            } else {
+                const data = await response.json();
+                alert("Failed to create listing: " + (data.message || "Unknown error"));
+            }
+        } catch (error) {
+            console.error("Error creating listing:", error);
+            alert("Could not connect to the server.");
+        }
+    });
+</script>
+
 </body>
 </html>

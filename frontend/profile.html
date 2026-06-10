@@ -12,11 +12,11 @@
     <a href="index.html" class="header-link">&larr; Back to Search</a>
 
     <div class="profile-card">
-        <div class="avatar">JV</div>
+        <div class="avatar" id="profileAvatar">JV</div>
         <div class="profile-info">
-            <h1>Juan V.</h1>
-            <div class="location">&#128205; Riverside Neighborhood | Zipcode: 92507</div>
-            <p class="bio">"Computer Science. Happy to lend out my tools."</p>
+            <h1 id="profileName">Juan Varela</h1>
+            <div class="location" id="profileLocation">&#128205; Random Neighborhood | Zipcode: 12345</div>
+            <p class="bio" id="profileBio">"Local resident happy to share tools and gear with neighbors."</p>
         </div>
     </div>
 
@@ -39,26 +39,30 @@
         </div>
     </div>
 
+    
+
     <h3 class="section-title">Current Listings</h3>
-    <div style="text-align: center; padding: 30px; background: white; border: 1px dashed #ccc; border-radius: 8px; color: #888;">
+    <div style="text-align: center; padding: 30px; background: white; border: 1px dashed #ccc; border-radius: 8px; color: #830;">
         <p>You currently have no active listings.</p>
         <a href="create-listing.html">
             <button class="btn-outline">Create a Listing</button>
         </a>
     </div>
-
-    <!-- added request sections so the profile matches the lender and borrower roles -->
-    <h3 class="section-title">Borrowing Requests</h3>
-    <div style="text-align: center; padding: 30px; background: white; border: 1px dashed #ccc; border-radius: 8px; color: #888;">
-        <p>You have not requested to borrow any items yet.</p>
-    </div>
-
-    <h3 class="section-title">Lending Requests</h3>
-    <div style="text-align: center; padding: 30px; background: white; border: 1px dashed #ccc; border-radius: 8px; color: #888;">
-        <p>No one has requested your listed items yet.</p>
-    </div>
-
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        //load real user data if logged in
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById("profileName").textContent = user.displayName;
+            document.getElementById("profileAvatar").textContent = user.displayName.substring(0, 2).toUpperCase();
+            document.getElementById("profileLocation").innerHTML = `&#128205; ${user.neighborhood} | Zipcode: ${user.zipcode}`;
+            document.getElementById("profileBio").textContent = `"${user.bio || 'No bio provided.'}"`;
+        }
+    });
+</script>
 
 </body>
 </html>

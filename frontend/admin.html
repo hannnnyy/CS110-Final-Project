@@ -75,5 +75,16 @@
 
 </div>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Admin access needed.");
+            window.location.href = "auth.html";
+        }
+    });
+</script>
+
 </body>
 </html>
