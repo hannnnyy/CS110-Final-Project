@@ -51,15 +51,43 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        //load real user data if logged in
+    document.addEventListener("DOMContentLoaded", async () => {
         const userStr = localStorage.getItem("user");
-        if (userStr) {
-            const user = JSON.parse(userStr);
-            document.getElementById("profileName").textContent = user.displayName;
-            document.getElementById("profileAvatar").textContent = user.displayName.substring(0, 2).toUpperCase();
-            document.getElementById("profileLocation").innerHTML = `&#128205; ${user.neighborhood} | Zipcode: ${user.zipcode}`;
-            document.getElementById("profileBio").textContent = `"${user.bio || 'No bio provided.'}"`;
+        const token = localStorage.getItem("token");
+
+        if (!userStr || !token) {
+            alert("Please log in to view your profile.");
+            window.location.href = "auth.html";
+            return;
+        }
+
+        const user = JSON.parse(userStr);
+        const API_BASE = "http://localhost:5001/api";
+
+        try {
+            //Fetch user profile data
+            const response = await fetch(`${API_BASE}/users/${user._id || user.id}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            
+            if (response.ok) {
+                const profileData = await response.json();
+
+                //Update Header Info
+                document.getElementById("profileName").textContent = profileData.displayName;
+                document.getElementById("profileAvatar").textContent = profileData.displayName.substring(0, 2).toUpperCase();
+                document.getElementById("profileLocation").innerHTML = `&#128205; ${profileData.neighborhood} | Zipcode: ${profileData.zipcode}`;
+                document.getElementById("profileBio").textContent = `"${profileData.bio || 'Happy to share with my neighbors!'}"`;
+
+                //Update Stats Grid
+                const statBoxes = document.querySelectorAll(".stat-number");
+                statBoxes[0].textContent = profileData.trustScore ? `${profileData.trustScore} / 5` : "New";
+                statBoxes[1].textContent = profileData.itemsListed || 0;
+                statBoxes[2].textContent = profileData.itemsLended || 0;
+                statBoxes[3].textContent = profileData.itemsBorrowed || 0;
+            }
+        } catch (error) {
+            console.error("Failed to load profile data:", error);
         }
     });
 </script>

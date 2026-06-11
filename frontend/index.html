@@ -51,15 +51,18 @@
 
         <div class="sidebar">
             <h2>Categories</h2>
-            <ul class="category-list">
-                <li>&#128295; Tools</li>
-                <li>&#127859; Kitchen Appliances</li>
-                <li>&#127957; Outdoor Gear</li>
-                <li>&#128187; Electronics</li>
+            <ul class="category-list" id="categoryFilter">
+                <li data-category="Tools & Hardware">&#128295; Tools & Hardware</li>
+                <li data-category="Kitchen Appliances">&#127859; Kitchen Appliances</li>
+                <li data-category="Outdoor & Garden">&#127957; Outdoor & Garden</li>
+                <li data-category="Electronics">&#128187; Electronics</li>
+                <li data-category="" style="color: #dc3545; margin-top: 10px;">&#10060; Clear Filters</li>
             </ul>
         </div>
     </div>
 </div>
+
+
 
 <script>
     const API_BASE = "http://localhost:5001/api";
@@ -118,6 +121,19 @@
     }
     document.getElementById("searchBtn").addEventListener("click", () => {
         fetchItems(document.getElementById("searchBar").value);
+    });
+
+    // Connect Sidebar Category Filters
+    const categoryItems = document.querySelectorAll("#categoryFilter li");
+    
+    categoryItems.forEach(item => {
+        item.addEventListener("click", (e) => {
+            const category = e.target.getAttribute("data-category");
+            // Visually update the search bar to show what is being filtered
+            document.getElementById("searchBar").value = category;
+            
+            fetchItems(category);
+        });
     });
 </script>
 
