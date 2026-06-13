@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NeighborGood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <span class="badge">Admin Only</span>
+    </div>
+
+    <a href="index.html" class="header-link">&larr; Back to Home</a>
+
+    <!-- added admin dashboard sections for managing users and item listings -->
+    <div class="data-section">
+        <h2>User Management</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Zipcode</th>
+                    <th>Trust Score</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Juan V.</td>
+                    <td>juan@example.com</td>
+                    <td>92507</td>
+                    <td>N/A</td>
+                    <td>
+                        <button class="btn-warning">Update</button>
+                        <button class="btn-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="data-section">
+        <h2>Listing Management</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Owner</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DeWalt 20V Max Cordless Drill</td>
+                    <td>Juan V.</td>
+                    <td>Tools</td>
+                    <td>Active</td>
+                    <td>
+                        <button class="btn-warning">Review</button>
+                        <button class="btn-danger">Remove</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Admin access required.");
+            window.location.href = "auth.html";
+            return;
+        }
+
+        const API_BASE = "http://localhost:5001/api";
+        const authHeaders = { "Authorization": `Bearer ${token}` };
+
+        try {
+            const userRes = await fetch(`${API_BASE}/admin/users`, { headers: authHeaders });
+            if (userRes.ok) {
+                const users = await userRes.json();
+                const userTbody = document.querySelectorAll("tbody")[0];
+                userTbody.innerHTML = ""; // Cle
+                users.forEach(u => {
+                    userTbody.innerHTML += `
+                        <tr>
+                            <td>${u.displayName}</td>
+                            <td>${u.email}</td>
+                            <td>${u.zipcode}</td>
+                            <td>${u.trustScore || "N/A"}</td>
+                            <td>
+                                <button class="btn-danger">Delete</button>
+                            </td>
+                        </tr>`;
+                });
+            }
+            //Fetch
+            const itemRes = await fetch(`${API_BASE}/admin/items`, { headers: authHeaders });
+            if (itemRes.ok) {
+                const items = await itemRes.json();
+                const itemTbody = document.querySelectorAll("tbody")[1];
+                itemTbody.innerHTML = ""; // Clear hardcoded data
+                
+                items.forEach(i => {
+                    const ownerName = i.owner ? i.owner.displayName : "Unknown";
+                    itemTbody.innerHTML += `
+                        <tr>
+                            <td>${i.title}</td>
+                            <td>${ownerName}</td>
+                            <td>${i.category}</td>
+                            <td>${i.status}</td>
+                            <td>
+                                <button class="btn-danger">Remove</button>
+                            </td>
+                        </tr>`;
+                });
+            }
+        } catch (error) {
+            console.error("Admin fetch error:", error);
+            //If the user is not an admin
+            alert("Failed to load admin data. Ensure you have admin privileges.");
+        }
+    });
+</script>
+
+</body>
+</html>

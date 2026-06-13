@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - NeighborGood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="profile-detail-container">
+    <a href="index.html" class="header-link">&larr; Back to Search</a>
+
+    <div class="profile-card">
+        <div class="avatar" id="profileAvatar">JV</div>
+        <div class="profile-info">
+            <h1 id="profileName">Juan Varela</h1>
+            <div class="location" id="profileLocation">&#128205; Random Neighborhood | Zipcode: 12345</div>
+            <p class="bio" id="profileBio">"Local resident happy to share tools and gear with neighbors."</p>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-number">N/A</div>
+            <div class="stat-label">Trust Score</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Items Listed</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Successfully Lended</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Successfully Borrowed</div>
+        </div>
+    </div>
+
+    
+
+    <h3 class="section-title">Current Listings</h3>
+    <div style="text-align: center; padding: 30px; background: white; border: 1px dashed #ccc; border-radius: 8px; color: #830;">
+        <p>You currently have no active listings.</p>
+        <a href="create-listing.html">
+            <button class="btn-outline">Create a Listing</button>
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const userStr = localStorage.getItem("user");
+        const token = localStorage.getItem("token");
+
+        if (!userStr || !token) {
+            alert("Please log in to view your profile.");
+            window.location.href = "auth.html";
+            return;
+        }
+
+        const user = JSON.parse(userStr);
+        const API_BASE = "http://localhost:5001/api";
+
+        try {
+            //Fetch user profile data
+            const response = await fetch(`${API_BASE}/users/${user._id || user.id}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            
+            if (response.ok) {
+                const profileData = await response.json();
+
+                //Update Header Info
+                document.getElementById("profileName").textContent = profileData.displayName;
+                document.getElementById("profileAvatar").textContent = profileData.displayName.substring(0, 2).toUpperCase();
+                document.getElementById("profileLocation").innerHTML = `&#128205; ${profileData.neighborhood} | Zipcode: ${profileData.zipcode}`;
+                document.getElementById("profileBio").textContent = `"${profileData.bio || 'Happy to share with my neighbors!'}"`;
+
+                //Update Stats Grid
+                const statBoxes = document.querySelectorAll(".stat-number");
+                statBoxes[0].textContent = profileData.trustScore ? `${profileData.trustScore} / 5` : "New";
+                statBoxes[1].textContent = profileData.itemsListed || 0;
+                statBoxes[2].textContent = profileData.itemsLended || 0;
+                statBoxes[3].textContent = profileData.itemsBorrowed || 0;
+            }
+        } catch (error) {
+            console.error("Failed to load profile data:", error);
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeighborGood - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .empty-state { text-align: center; padding: 40px 20px; color: #6c757d; }
+        .empty-state-icon { font-size: 50px; margin-bottom: 15px; color: #bdb8ad; }
+        .empty-state p { font-size: 18px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+            <h1>NeighborGood</h1>
+        </a>
+        
+        <div id="authNav" class="auth-buttons">
+            <a href="auth.html"><button class="btn-outline">Sign In</button></a>
+            <a href="register.html"><button class="btn-solid">Create Account</button></a>
+        </div>
+    </header>
+    <div class="search-container">
+        <input type="text" id="searchBar" class="search-bar" placeholder="Search by category, keyword, or zipcode...">
+        <button id="searchBtn" class="search-btn">Search</button>
+    </div>
+    <div class="main-grid">
+        <div id="feedSection" class="feed-section">
+            <h2>Available in your Neighborhood</h2>
+            
+            <a href="item.html">
+                <div class="item-card">
+                    <div class="item-image">&#128230;</div>
+                    <div class="item-details">
+                        <h3>Cordless Power Drill</h3>
+                        <p>Great power drill with battery and charger. Available for short-term borrowing.</p>
+                        <div class="tags">
+                            <span class="tag">Tools</span>
+                            <span class="tag">Like New</span>
+                            <span class="tag">12345</span>
+                        </div>
+                        <p><strong>Lender:</strong> John Doe</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar">
+            <h2>Categories</h2>
+            <ul class="category-list" id="categoryFilter">
+                <li data-category="Tools & Hardware">&#128295; Tools & Hardware</li>
+                <li data-category="Kitchen Appliances">&#127859; Kitchen Appliances</li>
+                <li data-category="Outdoor & Garden">&#127957; Outdoor & Garden</li>
+                <li data-category="Electronics">&#128187; Electronics</li>
+                <li data-category="" style="color: #dc3545; margin-top: 10px;">&#10060; Clear Filters</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    const API_BASE = "http://localhost:5001/api";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authNav = document.getElementById("authNav");
+        
+        if (token) {
+            authNav.innerHTML = `
+                <a href="profile.html"><button class="btn-outline">Profile</button></a>
+                <button class="btn-solid" onclick="logout()">Logout</button>
+            `;
+        }
+        fetchItems();
+    });
+
+    function logout() {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        window.location.reload(); 
+    }
+
+    async function fetchItems(searchQuery = "") {
+        try {
+            const url = searchQuery ? `${API_BASE}/items?search=${encodeURIComponent(searchQuery)}` : `${API_BASE}/items`;
+            const response = await fetch(url);
+            const items = await response.json();
+            const feedSection = document.getElementById("feedSection");
+            
+            if (!items || items.length === 0) return; // Keep static if empty
+            
+            feedSection.innerHTML = `<h2>Available in your Neighborhood</h2>`;
+            items.forEach(item => {
+                const ownerName = item.owner ? item.owner.displayName : "Neighbor";
+                feedSection.innerHTML += `
+                    <a href="item.html?id=${item._id}" style="text-decoration: none; color: inherit;">
+                        <div class="item-card">
+                            <div class="item-image">&#128230;</div>
+                            <div class="item-details">
+                                <h3>${item.title}</h3>
+                                <p>${item.description ? item.description.substring(0, 60) + '...' : ''}</p>
+                                <div class="tags">
+                                    <span class="tag">${item.category}</span>
+                                    <span class="tag">${item.condition}</span>
+                                    <span class="tag">${item.zipcode}</span>
+                                </div>
+                                <p><strong>Lender:</strong> ${ownerName}</p>
+                            </div>
+                        </div>
+                    </a>`;
+            });
+        } catch (error) {
+            console.error("Failed to fetch items. Backend might be offline.");
+        }
+    }
+    document.getElementById("searchBtn").addEventListener("click", () => {
+        fetchItems(document.getElementById("searchBar").value);
+    });
+
+    // Connect Sidebar Category Filters
+    const categoryItems = document.querySelectorAll("#categoryFilter li");
+    
+    categoryItems.forEach(item => {
+        item.addEventListener("click", (e) => {
+            const category = e.target.getAttribute("data-category");
+            // Visually update the search bar to show what is being filtered
+            document.getElementById("searchBar").value = category;
+            
+            fetchItems(category);
+        });
+    });
+</script>
+
+</body>
+</html>

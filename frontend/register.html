@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - NeighborGood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="form-container">
+    <a href="index.html" class="header-link">&larr; Back to Home</a>
+
+    <h1>Create Account</h1>
+    <p style="color: #650; margin-bottom: 30px;">
+        Join your neighborhood lending community.
+    </p>
+
+    <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="displayName" class="form-control" placeholder="e.g., Juan Varela">
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="regEmail" class="form-control" placeholder="Enter your email">
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="regPassword" class="form-control" placeholder="Create a password">
+    </div>
+
+    <div class="form-group">
+        <label>Neighborhood</label>
+        <input type="text" id="neighborhood" class="form-control" placeholder="e.g., Springfield Neighborhood">
+    </div>
+
+    <div class="form-group">
+        <label>Zipcode</label>
+        <input type="text" id="zipcode" class="form-control" placeholder="e.g., 12345">
+    </div>
+
+    <div class="form-group">
+        <label>Short Bio</label>
+        <textarea id="bio" class="form-control" placeholder="Tell your neighbors a little about yourself."></textarea>
+    </div>
+
+    <button id="registerBtn" class="btn-submit">Create Account</button>
+
+    <p style="text-align: center; margin-top: 25px;">
+        Already have an account?
+        <a href="auth.html" style="color: #0056b3; font-weight: bold;">Sign in</a>
+    </p>
+</div>
+
+<script>
+    document.getElementById("registerBtn").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const payload = {
+            displayName: document.getElementById("displayName").value,
+            email: document.getElementById("regEmail").value,
+            password: document.getElementById("regPassword").value,
+            neighborhood: document.getElementById("neighborhood").value,
+            zipcode: document.getElementById("zipcode").value,
+            bio: document.getElementById("bio").value
+        };
+
+        try {
+            const response = await fetch("http://localhost:5001/api/users/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("user", JSON.stringify(data));
+                localStorage.setItem("token", data.token);
+                window.location.href = "index.html"; 
+            } else {
+                alert("Registration failed: " + data.message);
+            }
+        } catch (error) {
+            console.error("Error registering:", error);
+            alert("Could not connect to the server.");
+        }
+    });
+</script>
+
+</body>
+</html>
