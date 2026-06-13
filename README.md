@@ -5,7 +5,7 @@ NeighborGood is a web application that solves the problem of people buying expen
 
 ## Team Member Contributions
 * **Juan Varela:** Frontend integration, UI navigation flow, DOM manipulation, and applying JavaScript fetch architecture to connect the frontend UI to backend.
-* **Hanson:** Backend server architecture, MongoDB database schemas, JWT authentication routing, and global CSS UI styling.
+* **Hanson Pan:** Backend server architecture, MongoDB database schemas, JWT authentication routing, and global CSS UI styling.
 
 ## Feature List
 * **Secure Authentication:** User registration and login utilizing JWT for secure sign in.
