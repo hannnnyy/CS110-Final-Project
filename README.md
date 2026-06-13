@@ -31,7 +31,7 @@ Open a terminal, navigate to the `backend` directory, install dependencies, and 
 cd backend
 npm install
 npm run dev
-
+```
 **2. Start the Frontend Client**
 Open a second terminal window, navigate to the `frontend` directory, and start a local Python HTTP server.
 
